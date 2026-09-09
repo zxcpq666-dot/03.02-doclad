@@ -1,0 +1,758 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Сравнительный анализ Backend-фреймворков Python</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #20242a;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #111827, #243b53);
+            color: white;
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        header .label {
+            display: inline-block;
+            padding: 6px 14px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,.3);
+            border-radius: 20px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        header h1 {
+            max-width: 900px;
+            margin: auto;
+            font-size: 38px;
+            line-height: 1.2;
+        }
+
+        header p {
+            max-width: 720px;
+            margin: 18px auto 0;
+            color: #d9e2ec;
+            font-size: 17px;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid #e1e5e9;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav ul {
+            max-width: 1100px;
+            margin: auto;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #34495e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #1769aa;
+        }
+
+        main {
+            max-width: 1050px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 28px;
+            padding: 32px;
+            border-radius: 14px;
+            border: 1px solid #e3e7eb;
+            box-shadow: 0 5px 18px rgba(20, 30, 40, .05);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #243b53;
+            color: white;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 25px;
+            color: #17202a;
+        }
+
+        h3 {
+            margin: 25px 0 10px;
+            color: #243b53;
+        }
+
+        p {
+            margin-bottom: 14px;
+        }
+
+        strong {
+            color: #17202a;
+        }
+
+        .intro {
+            font-size: 17px;
+            color: #4b5563;
+        }
+
+        /* Таблица */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            min-width: 700px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        th {
+            background: #243b53;
+            color: white;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .framework {
+            font-weight: bold;
+            color: #1769aa;
+        }
+
+        /* Карточки */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .card {
+            border: 1px solid #e1e6eb;
+            border-radius: 12px;
+            padding: 22px;
+            background: #fafbfc;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .card ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .card li {
+            margin-bottom: 7px;
+        }
+
+        /* Акцентный блок */
+
+        .highlight {
+            border-left: 5px solid #1769aa;
+            background: #f1f7fc;
+            padding: 20px 22px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .highlight strong {
+            color: #145a86;
+        }
+
+        /* FastAPI */
+
+        .code-box {
+            background: #111827;
+            color: #d1d5db;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 18px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        .code-key {
+            color: #93c5fd;
+        }
+
+        .code-type {
+            color: #86efac;
+        }
+
+        /* Рекомендации */
+
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .recommendation {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #dce3e8;
+        }
+
+        .recommendation .tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: #e8f1f8;
+            color: #1769aa;
+            margin-bottom: 12px;
+        }
+
+        .recommendation h3 {
+            margin: 0 0 10px;
+        }
+
+        footer {
+            background: #111827;
+            color: #aeb8c4;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 14px;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        @media (max-width: 800px) {
+            header h1 {
+                font-size: 30px;
+            }
+
+            section {
+                padding: 24px;
+            }
+
+            .cards,
+            .recommendations {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="label">Аналитическая записка</div>
+
+    <h1>Сравнительный анализ Backend-фреймворков Python</h1>
+
+    <p>
+        Django, Flask и FastAPI: архитектура, скорость разработки,
+        производительность и возможности для разных бизнес-задач.
+    </p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#comparison">Сравнение</a></li>
+        <li><a href="#batteries">Batteries Included</a></li>
+        <li><a href="#fastapi">FastAPI</a></li>
+        <li><a href="#recommendations">Рекомендации</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <!-- Введение -->
+
+    <section>
+        <div class="section-title">
+            <div class="number">01</div>
+            <h2>Введение</h2>
+        </div>
+
+        <p class="intro">
+            Backend-фреймворк определяет подход к разработке серверной части
+            приложения: обработке запросов, работе с базой данных,
+            валидации данных, авторизации и созданию API.
+        </p>
+
+        <p>
+            В Python существует несколько популярных решений, среди которых
+            особенно выделяются <strong>Django</strong>, <strong>Flask</strong>
+            и <strong>FastAPI</strong>. Каждый из них рассчитан на разные
+            сценарии использования.
+        </p>
+    </section>
+
+
+    <!-- Сравнение -->
+
+    <section id="comparison">
+
+        <div class="section-title">
+            <div class="number">02</div>
+            <h2>Сравнение фреймворков</h2>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Критерий</th>
+                        <th>Django</th>
+                        <th>Flask</th>
+                        <th>FastAPI</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>Архитектура</strong></td>
+
+                        <td>
+                            Полноценный монолитный фреймворк.
+                            Использует архитектурный подход MVT.
+                        </td>
+
+                        <td>
+                            Микрофреймворк с минимальным набором
+                            встроенных возможностей.
+                        </td>
+
+                        <td>
+                            Современный фреймворк для создания API
+                            на базе ASGI.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Скорость разработки</strong></td>
+
+                        <td>
+                            Очень высокая для крупных приложений:
+                            многие компоненты уже готовы.
+                        </td>
+
+                        <td>
+                            Высокая для небольших проектов,
+                            но дополнительные функции приходится
+                            подключать самостоятельно.
+                        </td>
+
+                        <td>
+                            Очень высокая при разработке API:
+                            маршруты, валидация и документация
+                            создаются быстро.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Производительность</strong></td>
+
+                        <td>
+                            Хорошая, но основной акцент сделан
+                            на функциональности.
+                        </td>
+
+                        <td>
+                            Хорошая для небольших и средних приложений.
+                        </td>
+
+                        <td>
+                            Очень высокая для API и большого количества
+                            одновременных запросов.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>ORM</strong></td>
+
+                        <td>
+                            <span class="framework">Есть</span> —
+                            Django ORM.
+                        </td>
+
+                        <td>
+                            <span class="framework">Нет встроенного</span>.
+                            Можно использовать SQLAlchemy и другие решения.
+                        </td>
+
+                        <td>
+                            <span class="framework">Нет встроенного</span>.
+                            Обычно применяются SQLAlchemy, SQLModel и другие ORM.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Админ-панель</strong></td>
+
+                        <td>
+                            <span class="framework">Есть</span> —
+                            мощная административная панель.
+                        </td>
+
+                        <td>
+                            Отсутствует из коробки.
+                        </td>
+
+                        <td>
+                            Отсутствует из коробки.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Валидация</strong></td>
+
+                        <td>
+                            Есть встроенные механизмы форм
+                            и моделей.
+                        </td>
+
+                        <td>
+                            Требует дополнительных библиотек
+                            или ручной реализации.
+                        </td>
+
+                        <td>
+                            <span class="framework">Есть</span> —
+                            Pydantic используется для проверки данных.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- Batteries included -->
+
+    <section id="batteries">
+
+        <div class="section-title">
+            <div class="number">03</div>
+            <h2>Что означает «батарейки включены»?</h2>
+        </div>
+
+        <p>
+            Термин <strong>«batteries included»</strong> означает подход,
+            при котором фреймворк предоставляет большое количество
+            необходимых инструментов непосредственно в составе системы.
+        </p>
+
+        <div class="highlight">
+            <strong>Django — классический пример подхода «батарейки включены».</strong>
+            Разработчик получает ORM, систему маршрутизации, авторизацию,
+            административную панель, работу с формами и множество других
+            компонентов.
+        </div>
+
+        <h3>Преимущества</h3>
+
+        <p>
+            Главный плюс — высокая скорость разработки. Не нужно самостоятельно
+            выбирать и настраивать десятки сторонних библиотек.
+            Также единый набор инструментов упрощает поддержку большого проекта.
+        </p>
+
+        <h3>Недостатки</h3>
+
+        <p>
+            Обратная сторона — меньшая гибкость. Если проекту требуется
+            нестандартная архитектура, часть возможностей Django может оказаться
+            избыточной.
+        </p>
+
+        <h3>Микрофреймворки</h3>
+
+        <p>
+            Микрофреймворки, такие как <strong>Flask</strong>, предоставляют
+            только базовый набор возможностей: маршрутизацию, обработку запросов
+            и механизм создания приложения.
+        </p>
+
+        <p>
+            Остальные компоненты разработчик выбирает самостоятельно.
+            Это делает систему гибкой, но требует больше решений при разработке
+            и настройке проекта.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Django</h3>
+
+                <p>
+                    Максимум готовых возможностей.
+                </p>
+
+                <ul>
+                    <li>Быстрый старт</li>
+                    <li>ORM</li>
+                    <li>Админ-панель</li>
+                    <li>Авторизация</li>
+                    <li>Единая архитектура</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Flask</h3>
+
+                <p>
+                    Минимум ограничений.
+                </p>
+
+                <ul>
+                    <li>Простота</li>
+                    <li>Гибкость</li>
+                    <li>Малый размер</li>
+                    <li>Свободный выбор библиотек</li>
+                    <li>Подходит для небольших сервисов</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>FastAPI</h3>
+
+                <p>
+                    Современный подход к API.
+                </p>
+
+                <ul>
+                    <li>Высокая производительность</li>
+                    <li>Type hints</li>
+                    <li>Pydantic</li>
+                    <li>Async/await</li>
+                    <li>Автодокументация API</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FastAPI -->
+
+    <section id="fastapi">
+
+        <div class="section-title">
+            <div class="number">04</div>
+            <h2>Как FastAPI использует возможности Python?</h2>
+        </div>
+
+        <p>
+            FastAPI активно использует возможности современного Python,
+            прежде всего <strong>type hints</strong> и асинхронное программирование
+            с помощью <strong>asyncio</strong>.
+        </p>
+
+        <h3>Type hints</h3>
+
+        <p>
+            Аннотации типов позволяют разработчику указать, какие данные
+            принимает функция и что она возвращает. FastAPI использует эту
+            информацию для автоматической проверки входных данных и построения
+            схем API.
+        </p>
+
+        <div class="code-box">
+            <span class="code-key">from</span> fastapi
+            <span class="code-key">import</span> FastAPI<br><br>
+
+            app = FastAPI()<br><br>
+
+            <span class="code-key">@app.get</span>(<span class="code-type">"/users/{user_id}"</span>)<br>
+            <span class="code-key">async def</span> get_user(
+            user_id: <span class="code-type">int</span>
+            ):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">return</span>
+            {"user_id": user_id}
+        </div>
+
+        <p>
+            В данном примере FastAPI понимает, что
+            <strong>user_id</strong> должен быть целым числом.
+            Если клиент передаст неправильный тип данных, фреймворк
+            автоматически обработает ошибку валидации.
+        </p>
+
+        <h3>Asyncio и асинхронность</h3>
+
+        <p>
+            FastAPI поддерживает синтаксис <strong>async/await</strong>.
+            Это особенно полезно для приложений, которые одновременно
+            выполняют большое количество операций ввода-вывода:
+            обращаются к базам данных, внешним API или сетевым сервисам.
+        </p>
+
+        <h3>Автоматическая документация</h3>
+
+        <p>
+            На основе маршрутов, типов данных и моделей FastAPI автоматически
+            формирует документацию API в форматах OpenAPI и JSON Schema.
+            Это значительно упрощает тестирование и взаимодействие
+            между frontend и backend-разработчиками.
+        </p>
+
+    </section>
+
+
+    <!-- Рекомендации -->
+
+    <section id="recommendations">
+
+        <div class="section-title">
+            <div class="number">05</div>
+            <h2>Рекомендации по выбору</h2>
+        </div>
+
+        <p>
+            Универсального победителя нет: выбор зависит от задач проекта,
+            количества пользователей и требований к архитектуре.
+        </p>
+
+        <div class="recommendations">
+
+            <div class="recommendation">
+
+                <span class="tag">СТАРТАП</span>
+
+                <h3>Django</h3>
+
+                <p>
+                    Хороший выбор, если стартапу необходимо быстро получить
+                    полноценный продукт с базой данных, авторизацией,
+                    административной панелью и готовой структурой проекта.
+                </p>
+
+            </div>
+
+            <div class="recommendation">
+
+                <span class="tag">ВЫСОКАЯ НАГРУЗКА</span>
+
+                <h3>FastAPI</h3>
+
+                <p>
+                    Подходит для высоконагруженных API, микросервисов
+                    и приложений с большим количеством параллельных
+                    сетевых операций благодаря ASGI и поддержке async/await.
+                </p>
+
+            </div>
+
+            <div class="recommendation">
+
+                <span class="tag">КОРПОРАТИВНЫЙ ПОРТАЛ</span>
+
+                <h3>Django</h3>
+
+                <p>
+                    Особенно удобен для крупных корпоративных систем,
+                    где важны ORM, авторизация, административная панель,
+                    безопасность и единая архитектура.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="highlight">
+
+            <strong>Итог:</strong>
+            Django лучше подходит для полноценных веб-приложений,
+            Flask — для небольших и гибких сервисов,
+            а FastAPI — для современных высокопроизводительных API.
+            Поэтому выбирать фреймворк следует не по популярности,
+            а исходя из конкретных требований проекта.
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <strong>Сравнительный анализ Backend-фреймворков Python</strong><br>
+    Аналитическая записка
+</footer>
+
+</body>
+</html>
+```
